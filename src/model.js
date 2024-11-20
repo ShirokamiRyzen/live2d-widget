@@ -11,7 +11,7 @@ class Model {
         } else if (typeof apiPath === "string") {
             if (!apiPath.endsWith("/")) apiPath += "/";
         } else {
-            throw "Invalid initWidget argument!";
+            throw "Argumen initWidget tidak valid!";
         }
         this.useCDN = useCDN;
         this.apiPath = apiPath;
@@ -33,7 +33,7 @@ class Model {
             loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
         } else {
             loadlive2d("live2d", `${this.apiPath}get/?id=${modelId}-${modelTexturesId}`);
-            console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`);
+            console.log(`Model Live2D ${modelId}-${modelTexturesId} berhasil dimuat`);
         }
     }
 
@@ -44,14 +44,14 @@ class Model {
             if (!this.modelList) await this.loadModelList();
             const target = randomSelection(this.modelList.models[modelId]);
             loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
-            showMessage("我的新衣服好看嘛？", 4000, 10);
+            showMessage("Apakah pakaian baruku terlihat bagus?", 4000, 10);
         } else {
-            // 可选 "rand"(随机), "switch"(顺序)
+            // Pilihan "rand" (acak), "switch" (urut)
             fetch(`${this.apiPath}rand_textures/?id=${modelId}-${modelTexturesId}`)
                 .then(response => response.json())
                 .then(result => {
-                    if (result.textures.id === 1 && (modelTexturesId === 1 || modelTexturesId === 0)) showMessage("我还没有其他衣服呢！", 4000, 10);
-                    else this.loadModel(modelId, result.textures.id, "我的新衣服好看嘛？");
+                    if (result.textures.id === 1 && (modelTexturesId === 1 || modelTexturesId === 0)) showMessage("Saya belum punya pakaian lain!", 4000, 10);
+                    else this.loadModel(modelId, result.textures.id, "Apakah pakaian baruku terlihat bagus?");
                 });
         }
     }
