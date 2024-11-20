@@ -3,7 +3,7 @@ import showMessage from "./message.js";
 import randomSelection from "./utils.js";
 import tools from "./tools.js";
 
-function loadWidget(config) {
+function muatWidget(config) {
     const model = new Model(config);
     localStorage.removeItem("waifu-display");
     sessionStorage.removeItem("waifu-text");
@@ -17,7 +17,7 @@ function loadWidget(config) {
         document.getElementById("waifu").style.bottom = 0;
     }, 0);
 
-    (function registerTools() {
+    (function daftarAlat() {
         tools["switch-model"].callback = () => model.loadOtherModel();
         tools["switch-texture"].callback = () => model.loadRandModel();
         if (!Array.isArray(config.tools)) {
@@ -32,9 +32,9 @@ function loadWidget(config) {
         }
     })();
 
-    function welcomeMessage(time) {
-        if (location.pathname === "/") { // 如果是主页
-            for (let { hour, text } of time) {
+    function pesanSelamatDatang(waktu) {
+        if (location.pathname === "/") { // Jika di halaman utama
+            for (let { hour, text } of waktu) {
                 const now = new Date(),
                     after = hour.split("-")[0],
                     before = hour.split("-")[1] || after;
@@ -43,7 +43,7 @@ function loadWidget(config) {
                 }
             }
         }
-        const text = `欢迎阅读<span>「${document.title.split(" - ")[0]}」</span>`;
+        const text = `Selamat membaca <span>「${document.title.split(" - ")[0]}」</span>`;
         let from;
         if (document.referrer !== "") {
             const referrer = new URL(document.referrer),
@@ -57,13 +57,13 @@ function loadWidget(config) {
 
             if (domain in domains) from = domains[domain];
             else from = referrer.hostname;
-            return `Hello！来自 <span>${from}</span> 的朋友<br>${text}`;
+            return `Halo！Dari <span>${from}</span> teman<br>${text}`;
         }
         return text;
     }
 
-    function registerEventListener(result) {
-        // 检测用户活动状态，并在空闲时显示消息
+    function daftarPendengarEvent(result) {
+        // Mendeteksi status aktivitas pengguna, dan menampilkan pesan saat kosong
         let userAction = false,
             userActionTimer,
             messageArray = result.message.default,
@@ -81,7 +81,7 @@ function loadWidget(config) {
                 }, 20000);
             }
         }, 1000);
-        showMessage(welcomeMessage(result.time), 7000, 11);
+        showMessage(pesanSelamatDatang(result.time), 7000, 11);
         window.addEventListener("mouseover", event => {
             for (let { selector, text } of result.mouseover) {
                 if (!event.target.closest(selector)) continue;
@@ -130,14 +130,14 @@ function loadWidget(config) {
         let modelId = localStorage.getItem("modelId"),
             modelTexturesId = localStorage.getItem("modelTexturesId");
         if (modelId === null) {
-            // 首次访问加载 指定模型 的 指定材质
-            modelId = 1; // 模型 ID
-            modelTexturesId = 53; // 材质 ID
+            // Saat pertama kali mengunjungi, muat model yang ditentukan dengan tekstur tertentu
+            modelId = 1; // ID model
+            modelTexturesId = 53; // ID tekstur
         }
         model.loadModel(modelId, modelTexturesId);
         fetch(config.waifuPath)
             .then(response => response.json())
-            .then(registerEventListener);
+            .then(daftarPendengarEvent);
     })();
 }
 
@@ -155,7 +155,7 @@ function initWidget(config, apiPath) {
     toggle.addEventListener("click", () => {
         toggle.classList.remove("waifu-toggle-active");
         if (toggle.getAttribute("first-time")) {
-            loadWidget(config);
+            muatWidget(config);
             toggle.removeAttribute("first-time");
         } else {
             localStorage.removeItem("waifu-display");
@@ -171,7 +171,7 @@ function initWidget(config, apiPath) {
             toggle.classList.add("waifu-toggle-active");
         }, 0);
     } else {
-        loadWidget(config);
+        muatWidget(config);
     }
 }
 
